@@ -31,10 +31,9 @@ Use this skill when you want Hermes to:
 
 ## Prerequisites
 
-- Grok Build CLI installed:
-  ```bash
-  curl -fsSL https://x.ai/cli/install.sh | bash
-  ```
+- Grok Build CLI installed and available on `PATH`.
+  - Verify with `grok --version`.
+  - Install or update Grok Build using the official xAI documentation rather than copying shell-pipe installer commands into this skill.
 - Authenticated (either via browser login or `XAI_API_KEY`)
 - Running inside a Git repository is recommended (like most coding agents)
 
