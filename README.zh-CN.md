@@ -4,6 +4,8 @@
 
 这是一个 Hermes skill，允许 Hermes 调用和编排 xAI 官方的 **Grok Build CLI**。
 
+**适配的 Grok Build 版本**：`@xai-official/grok@0.1.220` (npm) / `grok-build-0.1` (模型) — 截至 2026 年 5 月，处于 early beta 阶段。
+
 本 skill 严格基于 https://docs.x.ai/build/ 的官方文档（截至 2026 年 5 月）。仅记录当时官方文档中明确存在的功能。
 
 ## 动因
@@ -44,7 +46,7 @@ Hermes 会生成符合官方文档参数的 `terminal` 调用。
 
 ## 版本说明
 
-本 skill 仅适用于 2026 年 5 月 https://docs.x.ai/build/ 所记录的 Grok Build 版本。未来版本可能引入本 skill 未覆盖的变更。
+本 skill 适配 **Grok Build `@xai-official/grok@0.1.220`**（截至 2026 年 5 月的 npm 最新版本），使用模型 `grok-build-0.1`。相关内容基于 https://docs.x.ai/build/ 截至 2026 年 5 月的文档。未来版本可能引入本 skill 未覆盖的变更。
 
 ## License
 
