@@ -1,7 +1,7 @@
 ---
 name: grok-build-for-hermes
 description: Use when the user wants Hermes to call or orchestrate the official Grok Build CLI (xAI) for coding tasks, especially in headless mode or via ACP.
-version: 1.0.0
+version: 1.0.1
 author: yanyintingyou
 license: MIT
 platforms: [linux, macos, windows]
@@ -46,14 +46,18 @@ grok -p "Your prompt here"
 
 Common flags (from official docs):
 
-| Flag                        | Purpose                                      |
-|----------------------------|----------------------------------------------|
-| `-p, --single`             | Send a single prompt (headless)              |
-| `-m, --model`              | Select a specific model                      |
-| `--output-format`          | `plain`, `json`, or `streaming-json`         |
-| `--always-approve`         | Skip permission prompts                      |
-| `--cwd`                    | Set working directory                        |
-| `--no-auto-update`         | Skip background update checks (recommended in scripts) |
+| Flag                        | Purpose                                              |
+|----------------------------|------------------------------------------------------|
+| `-p, --single`             | Send a single prompt (headless)                      |
+| `-m, --model`              | Select a specific model                              |
+| `-s, --session-id`         | Create or resume a named headless session            |
+| `-r, --resume`             | Resume an existing session                           |
+| `-c, --continue`           | Continue the most recent session in current directory|
+| `--cwd`                    | Set the working directory                            |
+| `--output-format`          | `plain`, `json`, or `streaming-json`                 |
+| `--always-approve`         | Auto-approve tool executions                         |
+| `--no-alt-screen`          | Run inline (no fullscreen TUI)                       |
+| `--no-auto-update`         | Skip background update checks (recommended in scripts)|
 
 Example with Hermes `terminal` tool:
 
