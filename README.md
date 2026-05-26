@@ -4,6 +4,8 @@
 
 A Hermes skill that allows Hermes to invoke and orchestrate the official **Grok Build CLI** from xAI.
 
+**Target Grok Build version**: `@xai-official/grok@0.1.220` (npm) / `grok-build-0.1` (model) — early beta as of May 2026.
+
 This skill is strictly based on the official documentation at https://docs.x.ai/build/ (as of May 2026). It only documents features explicitly present in the official docs at that time.
 
 ## Motivation
@@ -44,7 +46,7 @@ Hermes will generate an appropriate `terminal` call using the documented flags.
 
 ## Version Notice
 
-This skill is valid only for the version of Grok Build documented at https://docs.x.ai/build/ in May 2026. Future versions may introduce breaking changes not covered here.
+This skill targets **Grok Build `@xai-official/grok@0.1.220`** (latest npm version as of May 2026), with model `grok-build-0.1`. It is based on the documentation at https://docs.x.ai/build/ as of May 2026. Future versions may introduce breaking changes not covered here.
 
 ## License
 
