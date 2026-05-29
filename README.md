@@ -4,7 +4,7 @@
 
 A Hermes skill that allows Hermes to invoke and orchestrate the official **Grok Build CLI** from xAI.
 
-**Target Grok Build version**: `@xai-official/grok@0.1.220` (npm) / `grok-build-0.1` (model) — early beta as of May 2026.
+**Target Grok Build CLI version**: `@xai-official/grok@0.2.11` (npm, current latest observed on 2026-05-29) / API coding model `grok-build-0.1`.
 
 ## Cross-agent compatibility and installation
 
@@ -30,7 +30,7 @@ The root `SKILL.md` and the packaged `skills/autonomous-ai-agents/grok-build-for
 - **Generic AgentSkills loaders**: use the directory that contains `SKILL.md`; the skill name is `grok-build-for-hermes`.
 
 
-This skill is strictly based on the official documentation at https://docs.x.ai/build/ (as of May 2026). It only documents features explicitly present in the official docs at that time.
+This skill is based on xAI Grok Build docs (`docs.x.ai/build/*`) plus current CLI help from `@xai-official/grok@0.2.11`. Re-check `grok --help` after upgrades because Grok Build is still early beta.
 
 ## Motivation
 
@@ -42,10 +42,11 @@ This skill provides a clean way for Hermes to call the `grok` binary in headless
 
 - Headless execution: `grok -p "prompt"`
 - Output formats: `plain`, `json`, `streaming-json`
-- Always-approve mode
+- Prompt sources: `-p/--single`, `--prompt-file`, `--prompt-json`
+- Safety/permission flags: `--always-approve`, `--permission-mode`, `--allow`, `--deny`
 - ACP support (`grok agent stdio`)
-- Session management flags (`-s`, `-r`, `-c`)
-- Model selection (`-m`)
+- Session/worktree/subagent flags: `-r`, `-c`, `--worktree`, `--agent`, `--agents`, `--no-subagents`
+- Model selection (`-m`) and `grok-build-0.1` API model awareness
 
 ## Installation
 
@@ -70,7 +71,7 @@ Hermes will generate an appropriate `terminal` call using the documented flags.
 
 ## Version Notice
 
-This skill targets **Grok Build `@xai-official/grok@0.1.220`** (latest npm version as of May 2026), with model `grok-build-0.1`. It is based on the documentation at https://docs.x.ai/build/ as of May 2026. Future versions may introduce breaking changes not covered here.
+This skill targets **Grok Build CLI `@xai-official/grok@0.2.11`** as observed on 2026-05-29, with API coding model `grok-build-0.1`. Future versions may introduce breaking changes; run `grok version` and `grok --help` locally before automation.
 
 ## License
 
