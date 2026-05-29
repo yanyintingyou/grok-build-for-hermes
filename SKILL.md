@@ -5,10 +5,7 @@ version: 1.0.1
 author: yanyintingyou
 license: MIT
 platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [grok, xai, coding-agent, headless, acp]
-    related_skills: [codex, hermes-agent]
+metadata: {"hermes":{"category":"autonomous-ai-agents","tags":["grok","xai","coding-agent","headless","acp"],"related_skills":["codex","hermes-agent"]},"openclaw":{"homepage":"https://github.com/yanyintingyou/grok-build-for-hermes"},"compatibility":{"agents":["Hermes Agent","Claude Code","OpenAI Codex","OpenClaw","generic AgentSkills loaders"]}}
 ---
 
 # Grok Build for Hermes
