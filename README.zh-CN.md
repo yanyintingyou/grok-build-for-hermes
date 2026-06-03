@@ -4,7 +4,7 @@
 
 这是一个 Hermes skill，允许 Hermes 调用和编排 xAI 官方的 **Grok Build CLI**。
 
-**适配的 Grok Build CLI 版本**：`@xai-official/grok@0.2.11`（npm，2026-05-29 实测 latest）/ API 编码模型 `grok-build-0.1`。
+**适配的 Grok Build CLI 版本**：`@xai-official/grok@0.2.20`（npm，2026-06-03 实测 latest）/ API 编码模型 `grok-build-0.1`。
 
 ## 跨 Agent 兼容结构与安装
 
@@ -30,7 +30,7 @@ repo/
 - **通用 AgentSkills 加载器**：使用包含 `SKILL.md` 的目录；skill 名称为 `grok-build-for-hermes`。
 
 
-本 skill 基于 xAI Grok Build 官方文档（`docs.x.ai/build/*`）以及 `@xai-official/grok@0.2.11` 当前 CLI help 校对。Grok Build 仍处于 early beta，升级后请重新运行 `grok --help` 核对参数。
+本 skill 基于 xAI Grok Build 官方文档（`docs.x.ai/build/*`）以及 `@xai-official/grok@0.2.20` 当前 CLI help 校对。Grok Build 仍处于 early beta，升级后请重新运行 `grok --help` 核对参数。
 
 ## 动因
 
@@ -71,7 +71,7 @@ Hermes 会生成符合官方文档参数的 `terminal` 调用。
 
 ## 版本说明
 
-本 skill 适配 **Grok Build CLI `@xai-official/grok@0.2.11`**（2026-05-29 实测），以及 API 编码模型 `grok-build-0.1`。未来版本如有破坏性变更，请先运行 `grok version` 和 `grok --help` 再自动化调用。
+本 skill 适配 **Grok Build CLI `@xai-official/grok@0.2.20`**（2026-06-03 实测），以及 API 编码模型 `grok-build-0.1`。未来版本如有破坏性变更，请先运行 `grok version` 和 `grok --help` 再自动化调用。
 
 ## License
 

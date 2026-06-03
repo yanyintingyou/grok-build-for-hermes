@@ -4,7 +4,7 @@
 
 A Hermes skill that allows Hermes to invoke and orchestrate the official **Grok Build CLI** from xAI.
 
-**Target Grok Build CLI version**: `@xai-official/grok@0.2.11` (npm, current latest observed on 2026-05-29) / API coding model `grok-build-0.1`.
+**Target Grok Build CLI version**: `@xai-official/grok@0.2.20` (npm, current latest observed on 2026-06-03) / API coding model `grok-build-0.1`.
 
 ## Cross-agent compatibility and installation
 
@@ -30,7 +30,7 @@ The root `SKILL.md` and the packaged `skills/autonomous-ai-agents/grok-build-for
 - **Generic AgentSkills loaders**: use the directory that contains `SKILL.md`; the skill name is `grok-build-for-hermes`.
 
 
-This skill is based on xAI Grok Build docs (`docs.x.ai/build/*`) plus current CLI help from `@xai-official/grok@0.2.11`. Re-check `grok --help` after upgrades because Grok Build is still early beta.
+This skill is based on xAI Grok Build docs (`docs.x.ai/build/*`) plus current CLI help from `@xai-official/grok@0.2.20`. Re-check `grok --help` after upgrades because Grok Build is still early beta.
 
 ## Motivation
 
@@ -71,7 +71,7 @@ Hermes will generate an appropriate `terminal` call using the documented flags.
 
 ## Version Notice
 
-This skill targets **Grok Build CLI `@xai-official/grok@0.2.11`** as observed on 2026-05-29, with API coding model `grok-build-0.1`. Future versions may introduce breaking changes; run `grok version` and `grok --help` locally before automation.
+This skill targets **Grok Build CLI `@xai-official/grok@0.2.20`** as observed on 2026-06-03, with API coding model `grok-build-0.1`. Future versions may introduce breaking changes; run `grok version` and `grok --help` locally before automation.
 
 ## License
 
