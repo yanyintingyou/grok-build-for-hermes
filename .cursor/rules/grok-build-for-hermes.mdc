@@ -1,7 +1,0 @@
----
-description: Load grok-build-for-hermes when the task matches the skill description.
-globs: ["**/*.md", "**/*"]
-alwaysApply: false
----
-
-Use the repository root `SKILL.md` as the authoritative instruction file. The packaged skill copy is `skills/autonomous-ai-agents/grok-build-for-hermes/SKILL.md`.
