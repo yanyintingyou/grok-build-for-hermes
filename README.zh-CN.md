@@ -1,52 +1,50 @@
-# grok-build-for-hermes
+# grok-build-for-agent
 
 简体中文 | [English](README.md)
 
-这是一个 Hermes skill，允许 Hermes 调用和编排 xAI 官方的 **Grok Build CLI**。
+这是一个**通用多 Agent 兼容**的 skill，允许 Hermes、Claude Code、OpenAI Codex、OpenClaw 以及其他兼容 Agent 调用和编排 xAI 官方的 **Grok Build CLI**。
 
-**适配的 Grok Build CLI 版本**：`@xai-official/grok@0.2.20`（npm，2026-06-03 实测 latest）/ API 编码模型 `grok-build-0.1`。
+**适配的 Grok Build CLI 版本**：`v0.2.92`（2026-07-08 观测，**Grok 4.5** 驱动） / API 编码模型 `grok-build-0.1`。
 
 ## 跨 Agent 兼容结构与安装
 
-本仓库现在使用双布局 skill 结构：
+本仓库使用双布局 skill 结构以实现最大兼容性：
 
 ```text
 repo/
-├── SKILL.md                                      # 跨 Agent 通用的权威说明
+├── SKILL.md                                      # 跨 Agent 通用的权威说明 (v1.3.0)
 ├── AGENTS.md                                    # Codex / OpenAI 项目指令
 ├── CLAUDE.md                                    # Claude Code 项目指令
 ├── agents/openai.yaml                           # 可选 OpenAI agent 元数据
-└── skills/autonomous-ai-agents/grok-build-for-hermes/SKILL.md  # Hermes / OpenClaw 打包版 skill
+└── skills/autonomous-ai-agents/grok-build-for-agent/SKILL.md  # 打包版 skill（字节级一致）
 ```
 
-根目录 `SKILL.md` 与 `skills/autonomous-ai-agents/grok-build-for-hermes/SKILL.md` 会保持字节级一致。若有脚本、参考文档或依赖文件，它们也会同时出现在两个可安装位置旁边。
+根目录 `SKILL.md` 与 `skills/autonomous-ai-agents/grok-build-for-agent/SKILL.md` 保持字节级一致。相关支持文件会出现在两个可安装位置旁边。
 
 ### 作为可复用 skill 安装
 
-- **Claude Code**：复制 `skills/autonomous-ai-agents/grok-build-for-hermes/` 到 `~/.claude/skills/autonomous-ai-agents/grok-build-for-hermes/`。
-- **OpenAI Codex / OpenAI agents**：在本仓库工作时保留 `AGENTS.md`；如需作为可复用 skill，复制 `skills/autonomous-ai-agents/grok-build-for-hermes/` 到 `~/.agents/skills/autonomous-ai-agents/grok-build-for-hermes/`。
-- **OpenClaw**：复制 `skills/autonomous-ai-agents/grok-build-for-hermes/` 到 `<workspace>/skills/autonomous-ai-agents/grok-build-for-hermes/`、`<workspace>/.agents/skills/autonomous-ai-agents/grok-build-for-hermes/` 或 `~/.openclaw/skills/autonomous-ai-agents/grok-build-for-hermes/`。
-- **Hermes Agent**：复制 `skills/autonomous-ai-agents/grok-build-for-hermes/` 到 `~/.hermes/skills/autonomous-ai-agents/grok-build-for-hermes/`，然后开启新的 Hermes 会话。
-- **通用 AgentSkills 加载器**：使用包含 `SKILL.md` 的目录；skill 名称为 `grok-build-for-hermes`。
+- **Claude Code**：复制 `skills/autonomous-ai-agents/grok-build-for-agent/` 到 `~/.claude/skills/autonomous-ai-agents/grok-build-for-agent/`。
+- **OpenAI Codex / OpenAI agents**：在本仓库工作时保留 `AGENTS.md`；如需作为可复用 skill，复制 `skills/autonomous-ai-agents/grok-build-for-agent/` 到 `~/.agents/skills/autonomous-ai-agents/grok-build-for-agent/`。
+- **OpenClaw**：复制 `skills/autonomous-ai-agents/grok-build-for-agent/` 到相应 skills 目录。
+- **Hermes Agent**：复制 `skills/autonomous-ai-agents/grok-build-for-agent/` 到 `~/.hermes/skills/autonomous-ai-agents/grok-build-for-agent/`，然后开启新会话。
+- **通用 AgentSkills 加载器**：使用包含 `SKILL.md` 的目录；skill 名称为 `grok-build-for-agent`。
 
-
-本 skill 基于 xAI Grok Build 官方文档（`docs.x.ai/build/*`）以及 `@xai-official/grok@0.2.20` 当前 CLI help 校对。Grok Build 仍处于 early beta，升级后请重新运行 `grok --help` 核对参数。
+本 skill 基于 xAI Grok Build 最新官方文档（docs.x.ai/build/*）及 v0.2.92 CLI help 全面更新。Grok Build 仍在快速迭代，升级后请重新运行 `grok --help` 核对参数。
 
 ## 动因
 
-虽然 Hermes 可以通过 `xai-oauth` 提供商直接使用 Grok 模型，但很多用户也希望利用 **Grok Build** 完整 coding agent 的能力（Plan 模式、Skills、Headless 执行、ACP 支持等）。
+虽然 Agent 可以通过 `xai-oauth` 或 xAI API 直接使用 Grok 模型，但很多用户希望利用 **Grok Build** 完整的 coding agent 能力（headless 执行、Plan Mode、丰富 tooling、MCP/plugin 支持、ACP、会话/worktree 管理、Grok 4.5 能力等）。
 
-本 skill 提供了一种干净的方式，让 Hermes 可以调用 `grok` 二进制，支持 headless 模式或 ACP 模式，类似于 `codex` skill 调用 OpenAI Codex CLI 的方式。
+本 skill 为任何兼容 Agent 提供了一种干净、标准化的方式来调用 `grok` 二进制，支持 headless 模式或 ACP 模式，类似于 `codex` skill 调用 OpenAI Codex CLI 的方式，但现在具有更广泛的跨 Agent 生态兼容性。
 
 ## 官方文档支持的关键能力
 
-- Headless 执行：`grok -p "prompt"`
-- 输出格式：`plain`、`json`、`streaming-json`
-- Prompt 来源：`-p/--single`、`--prompt-file`、`--prompt-json`
-- 安全/权限参数：`--always-approve`、`--permission-mode`、`--allow`、`--deny`
-- ACP 支持（`grok agent stdio`）
-- 会话、worktree、subagent 参数：`-r`、`-c`、`--worktree`、`--agent`、`--agents`、`--no-subagents`
-- 模型选择（`-m`）以及 `grok-build-0.1` API 模型说明
+- Headless 执行：`grok -p "prompt"` / `--prompt-file` / `--prompt-json`
+- 输出格式：`plain`、`json`、`streaming-json`；新增 `--json-schema` 用于结构化验证
+- 丰富 flag：`--always-approve`/`--yolo`、`--permission-mode`、`--effort`/`--reasoning-effort`、`--tools`/`--disallowed-tools`、`--max-turns`、`--no-plan`、`--no-subagents`、worktree、会话管理、`grok inspect`、MCP/plugin 命令等
+- ACP 支持：`grok agent stdio`
+- 模型：Grok 4.5（主要）+ grok-build-0.1 编码模型
+- 会话/worktree/export/import（支持从 Claude Code 导入）
 
 ## 安装
 
@@ -54,24 +52,25 @@ repo/
 
 ```bash
 hermes skills tap add yanyintingyou/grok-build-for-hermes
-hermes skills install yanyintingyou/grok-build-for-hermes/grok-build-for-hermes --force
+grok-build-for-agent skill install（或对应 Agent 的安装命令）
 ```
 
 ## 使用示例
 
-对 Hermes 说：
+对 Agent 说：
 
 ```text
-使用 grok-build-for-hermes 以 headless 模式运行以下任务：
-任务：将用户认证模块重构为使用 JWT。
+使用 grok-build-for-agent 以 headless 模式运行以下任务：
+任务：将用户认证模块重构为使用 JWT，并添加完善错误处理和测试。
 工作目录：~/projects/my-app
+使用 --always-approve --output-format streaming-json --max-turns 20
 ```
 
-Hermes 会生成符合官方文档参数的 `terminal` 调用。
+Agent 会生成符合 v0.2.92 官方文档参数的 `terminal`（或等效）调用。
 
 ## 版本说明
 
-本 skill 适配 **Grok Build CLI `@xai-official/grok@0.2.20`**（2026-06-03 实测），以及 API 编码模型 `grok-build-0.1`。未来版本如有破坏性变更，请先运行 `grok version` 和 `grok --help` 再自动化调用。
+本 skill 适配 **Grok Build v0.2.92**（2026-07-08 观测，Grok 4.5 驱动）。未来版本可能有破坏性变更；自动化前请先运行 `grok version` 和 `grok --help`。双布局与多 Agent metadata 确保广泛兼容性。
 
 ## License
 
