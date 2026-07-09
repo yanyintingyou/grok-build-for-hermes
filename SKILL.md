@@ -1,56 +1,55 @@
 ---
-name: grok-build-for-hermes
-description: Use when the user wants Hermes to call or orchestrate the official Grok Build CLI (xAI) for coding tasks, especially in headless mode or via ACP.
-version: 1.2.0
+name: grok-build-for-agent
+description: Use when any compatible agent (Hermes, Claude Code, OpenAI Codex, OpenClaw, generic AgentSkills loaders, ACP-compatible agents, etc.) wants to call or orchestrate the official Grok Build CLI (xAI) for coding tasks, especially in headless mode or via ACP.
+version: 1.3.0
 author: yanyintingyou
 license: MIT
 platforms: [linux, macos, windows]
-metadata: {"hermes":{"category":"autonomous-ai-agents","tags":["grok","xai","coding-agent","headless","acp"],"related_skills":["codex","hermes-agent"]},"openclaw":{"homepage":"https://github.com/yanyintingyou/grok-build-for-hermes"},"compatibility":{"agents":["Hermes Agent","Claude Code","OpenAI Codex","OpenClaw","generic AgentSkills loaders"]}}
+metadata: {"category":"autonomous-ai-agents","tags":["grok","xai","coding-agent","headless","acp","multi-agent","grok-4.5","mcp","plugin"],"compatibility":{"agents":["Hermes Agent","Claude Code","OpenAI Codex","OpenClaw","generic AgentSkills loaders","ACP-compatible agents"]},"openclaw":{"homepage":"https://github.com/yanyintingyou/grok-build-for-agent"}}
 ---
 
-# Grok Build for Hermes
+# Grok Build for Agent
 
-This skill enables Hermes to invoke the official **Grok Build CLI** (`grok`) from xAI.
+This skill enables **any compatible agent** to invoke the official **Grok Build CLI** (`grok`) from xAI for coding tasks.
 
-**Important**: This skill was refreshed against xAI Grok Build docs and CLI help on 2026-06-03. The npm package `@xai-official/grok` currently reports `0.2.20`; the coding API model remains `grok-build-0.1`. Treat Grok Build as early beta and re-check `grok --help` after upgrades.
+**Important**: This skill was comprehensively refreshed against the latest xAI Grok Build documentation and CLI help on **2026-07-08**. Target version: **v0.2.92** (powered by **Grok 4.5**). The dedicated coding API model `grok-build-0.1` remains available for agentic workflows. Grok Build evolves rapidly — always run `grok version` and `grok --help` (and subcommand --help) locally before relying on exact behavior.
 
 ## When to Use
 
-Use this skill when you want Hermes to:
+Use this skill when you want a compatible agent to:
+- Run Grok Build in headless mode (`grok -p "..."` or `--prompt-file`)
+- Execute complex one-off or long-running coding tasks via the Grok Build agent
+- Integrate Grok Build into automated workflows, CI, or multi-agent orchestration
+- Use ACP mode (`grok agent stdio`) for structured JSON-RPC integration with other systems or agents
+- Manage sessions, worktrees, MCP servers, plugins, memory, export/import, and configuration via agent-driven terminal calls
+- Leverage Grok 4.5's strong coding and agentic capabilities (with optional grok-build-0.1 for specific API coding tasks)
 
-- Run Grok Build in headless mode (`grok -p "..."`)
-- Execute one-off coding tasks via the Grok Build agent
-- Integrate Grok Build into automated workflows
-- Use ACP mode (`grok agent stdio`) for structured integration
-- Manage sessions, models, or output formats through Hermes terminal calls
-
-**Do not use** this skill if you want Hermes to use Grok models directly via the `xai-oauth` provider (that is a separate, recommended path).
+**Do not use** this skill if you want the agent to use Grok models directly via the `xai-oauth` provider or raw API (that is a separate, recommended path for simple chat/completion use cases).
 
 ## Prerequisites
 
 - Grok Build CLI installed and available on `PATH`.
+  - Official install: `curl -fsSL https://x.ai/cli/install.sh | bash` (Linux/macOS) or `irm https://x.ai/cli/install.ps1 | iex` (Windows).
   - Verify with `grok --version`.
-  - Install or update Grok Build using the official xAI documentation rather than copying shell-pipe installer commands into this skill.
-- Authenticated (either via browser login or `XAI_API_KEY`)
-- Running inside a Git repository is recommended (like most coding agents)
+- Authenticated (first launch opens browser login; headless/server use `export XAI_API_KEY=...` or cached login via `grok login`).
+- Running inside a Git repository is strongly recommended.
+- For advanced automation, understand permission modes, tool allow/deny lists, and sandbox profiles.
 
-## Current Version Check
+## Current Version Check (as of 2026-07-08)
 
-As of this refresh:
+- CLI version: `grok 0.2.92`
+- Primary model: **Grok 4.5** (powers the Grok Build TUI and agentic loops)
+- API coding model: `grok-build-0.1` (available via xAI API for agentic coding)
+- Key new capabilities in 0.2.9x: improved headless reliability, `/minimal` & `/fullscreen` TUI commands, `ask_user_question` tool toggle, better shell output display, MCP/plugin enhancements, permission mode improvements.
 
-- npm package: `@xai-official/grok@0.2.20` (`latest` / `alpha` as of 2026-06-03)
-- binary: `grok`; local smoke check used `grok version` → `grok 0.2.20 (77224a6aa)`
-- API coding model: `grok-build-0.1`
-- model page notes: 256k context window; aliases include `grok-code-fast-1`, `grok-code-fast`, and `grok-code-fast-1-0825`
-
-Verify locally before relying on exact flags:
-
+Always verify locally:
 ```bash
 grok version
 grok --help
 grok agent --help
 grok agent stdio --help
 grok inspect --json
+grok models
 ```
 
 ## One-Shot Headless Execution
@@ -59,47 +58,37 @@ grok inspect --json
 grok -p "Your prompt here"
 ```
 
-Common flags verified against `@xai-official/grok@0.2.20 --help` and xAI docs:
+**Recommended flags for automation** (verified against v0.2.92 docs and CLI reference):
 
 | Flag | Purpose |
 |------|---------|
-| `-p, --single <PROMPT>` | Run a single-turn headless prompt and print output. |
-| `--prompt-file <PATH>` | Run a single-turn prompt loaded from a file. Prefer this for long prompts to avoid shell quoting issues. |
-| `--prompt-json <JSON>` | Run a single-turn prompt as JSON content blocks. |
-| `-m, --model <MODEL>` | Select a model ID. The API coding model is still `grok-build-0.1`. |
-| `-r, --resume [SESSION_ID]` | Resume a specific session, or the most recent if omitted. |
-| `--restore-code` | When resuming, check out the original session's commit. |
-| `-c, --continue` | Continue the most recent session for the current working directory. |
-| `--cwd <CWD>` | Set the working directory. |
-| `--output-format <plain|json|streaming-json>` | Output format for headless mode; default is `plain`. |
-| `--always-approve` | Auto-approve all tool executions. Use only for well-scoped tasks. |
-| `--permission-mode <MODE>` | Select permission behavior. Current CLI values include `default`, `acceptEdits`, `auto`, `dontAsk`, `bypassPermissions`, and `plan`. |
-| `--no-alt-screen` | Run inline instead of using the terminal alternate screen. |
-| `--no-auto-update` | Skip background update checks in scripts/CI/ACP. This is documented by xAI and accepted by 0.2.20, although it is not shown in the top-level `--help` output. Persistent equivalent: `[cli] auto_update = false` in `~/.grok/config.toml`. |
-| `--no-plan` | Disable plan mode. |
+| `-p, --prompt <PROMPT>` / `--prompt-file <PATH>` / `--prompt-json <JSON>` | Run single-turn headless prompt (prefer --prompt-file for long/complex prompts). |
+| `-m, --model <MODEL>` | Select model (e.g. grok-4.5 or custom via config.toml). |
+| `--effort <LEVEL>` / `--reasoning-effort <low|medium|high|xhigh|max>` | Control reasoning effort (interchangeable flags). |
+| `--json-schema <SCHEMA>` | Constrain/validate output as JSON schema (excellent for structured parsing by agents). |
+| `--output-format <plain|json|streaming-json>` | Control output format for programmatic consumption. |
+| `--always-approve` / `--yolo` | Auto-approve all tool calls (use only for well-scoped, low-risk tasks). |
+| `--permission-mode <MODE>` | Control permission behavior (default, acceptEdits, auto, dontAsk, bypassPermissions, plan, classifier). |
+| `--allow <RULE>` / `--deny <RULE>` | Fine-grained permission rules. |
+| `--tools <LIST>` / `--disallowed-tools <LIST>` | Explicitly allow or remove built-in tools. Claude Code aliases supported. |
+| `--max-turns <N>` | Hard limit on agent turns (prevents runaway loops). |
+| `--no-plan` | Disable Plan Mode. |
 | `--no-subagents` | Disable subagent spawning. |
-| `--best-of-n <N>` | Run the task N ways in parallel and pick the best (headless only). |
-| `--check` | Append a self-verification loop to the prompt (headless only). |
-| `--worktree [NAME]` | Start the session in a new git worktree. |
-| `--agent <NAME>` / `--agents <JSON>` | Select or define subagents. |
-| `--allow <RULE>` / `--deny <RULE>` | Permission allow/deny rules. |
-| `--tools <TOOLS>` / `--disallowed-tools <TOOLS>` | Allow or remove built-in tools. |
-| `--disable-web-search` | Disable web search and web fetch tools. |
-| `--reasoning-effort <EFFORT>` / `--effort <low|medium|high|xhigh|max>` | Reasoning/effort controls when supported. |
-| `--max-turns <N>` | Maximum number of agent turns. |
-| `--rules <RULES>` | Append extra rules to the system prompt. |
-| `--system-prompt-override <PROMPT>` | Override the agent system prompt. Use sparingly because it can bypass project instructions. |
-| `--sandbox <PROFILE>` | Select sandbox profile for filesystem/network access when configured. |
-| `--experimental-memory` / `--no-memory` | Enable or disable cross-session memory for this session. |
-| `--compaction-mode <summary|transcript|segments>` / `--compaction-detail <none|minimal|balanced|verbose>` | Control context compaction behavior. |
-| `--todo-gate` | Enable runtime turn-end TodoGate for this session. |
-| `--verbatim` | Send the prompt exactly as given. |
+| `--no-memory` / `--experimental-memory` | Disable or enable cross-session memory. |
+| `--disable-web-search` | Disable web search and web_fetch tools. |
+| `--sandbox <PROFILE>` | Apply sandbox profile for FS/network access. |
+| `--rules <TEXT>` / `--system-prompt-override <TEXT>` | Append rules or fully override system prompt. |
+| `--cwd <PATH>` | Set working directory. |
+| `-r, --resume [<ID>]` / `-c, --continue` | Resume or continue sessions. |
+| `--fork-session` | Fork into new session ID when resuming. |
+| `--session-id <UUID>` | Use specific session UUID for determinism. |
+| `--worktree [<NAME>]` / `--ref <REF>` | Start in new git worktree (optionally from specific ref). |
+| `--no-auto-update` | Skip background updates (recommended in scripts/CI/ACP). Persistent: `[cli] auto_update = false` in `~/.grok/config.toml`. |
 
-Example with Hermes `terminal` tool:
-
+**Example with agent `terminal` tool (Hermes or similar):**
 ```python
 terminal(
-    command='grok --no-auto-update -p "Refactor the authentication module" --output-format plain',
+    command='grok --no-auto-update -p "Refactor the authentication module to use JWT with proper error handling" --output-format streaming-json --always-approve --max-turns 15',
     workdir="~/projects/my-repo",
     pty=true
 )
@@ -107,11 +96,10 @@ terminal(
 
 ## Background / Long-Running Tasks
 
-For longer tasks, combine with Hermes background mode:
-
+For longer tasks use background mode + notification:
 ```python
 terminal(
-    command='grok --no-auto-update -p "Implement the new feature described in the ticket" --always-approve --output-format streaming-json',
+    command='grok --no-auto-update -p "Implement the full feature described in the ticket" --always-approve --output-format streaming-json --max-turns 30',
     workdir="~/projects/my-repo",
     background=true,
     pty=true,
@@ -121,49 +109,81 @@ terminal(
 
 ## ACP Mode (Agent Client Protocol)
 
-Grok Build supports ACP:
-
 ```bash
 grok agent stdio
 ```
 
-This allows structured JSON-RPC communication. Hermes can spawn this if needed for advanced integrations.
+This runs Grok Build as a structured JSON-RPC agent over stdin/stdout. Ideal for deep integration with other agent frameworks, IDEs, or custom orchestration layers. Use when you need reliable machine-to-machine communication rather than one-shot prompts.
+
+## Using grok inspect, models, mcp, plugin (New in recent versions)
+
+- `grok inspect [--json]` — Discover rules, skills, plugins, hooks, MCP servers, and config sources in the current directory.
+- `grok models` — List available models and their configurations.
+- `grok mcp <list|add|remove|doctor>` — Manage MCP servers.
+- `grok plugin <list|install|uninstall|update|...>` + `grok plugin marketplace` — Manage plugins and marketplaces.
+
+These are extremely useful for agents to dynamically inspect and extend the environment.
+
+## Session, Worktree, Export & Import Management
+
+- `grok sessions <list|search|delete>`
+- `grok worktree <list|show|rm|gc>`
+- `grok export <session-id> [output]` — Export transcript as Markdown.
+- `grok import [targets...]` — Import sessions from Claude Code (great for cross-agent continuity).
+
+Agents can use these to maintain state, branch work, or migrate context between tools.
+
+## Structured Output & Validation
+
+Prefer `--output-format json` or `streaming-json`, or `--json-schema` for strict schema validation. This makes it much easier for the calling agent to reliably parse results.
+
+## Permission Modes & Safety for Agent-Driven Automation
+
+Grok Build 0.2.x has rich permission controls. For automation:
+- Use `--always-approve` (or `--yolo`) only for narrow, well-understood tasks.
+- Prefer explicit `--allow` / `--deny` rules and `--tools` / `--disallowed-tools`.
+- Consider `--sandbox` profiles for untrusted codebases.
+- Monitor with `grok inspect` and limit `--max-turns`.
+- Newer modes like `auto` and `classifier` reduce interactive prompts while maintaining safety.
 
 ## Configuration Notes
 
-- Global config lives at `~/.grok/config.toml`.
-- xAI's headless/ACP docs recommend `--no-auto-update` in scripts and CI; persistent equivalent:
-  ```toml
-  [cli]
-  auto_update = false
-  ```
-- Permission behavior can be controlled per invocation with `--permission-mode <MODE>` and `--always-approve`. The current CLI exposes modes such as `default`, `acceptEdits`, `auto`, `dontAsk`, `bypassPermissions`, and `plan`.
-- Use `grok inspect` to see discovered config sources, instructions, skills, plugins, hooks, and MCP servers in the current directory. Use `grok inspect --json` when Hermes needs machine-readable output.
-- Useful current management commands include `grok models`, `grok sessions`, `grok plugin`, `grok mcp`, `grok memory`, `grok worktree`, `grok export`, `grok import`, `grok trace`, `grok leader`, `grok setup`, and `grok version`.
-- `grok agent` now exposes multiple non-TUI modes: `stdio` for ACP, `headless` for the Grok WebSocket relay, `serve` for a WebSocket server, and `leader` for a shared leader process. Hermes integrations should still prefer `grok -p ...` for one-shot work and `grok agent stdio` for ACP unless a relay/server architecture is explicitly needed.
+- Global config: `~/.grok/config.toml`
+- Use `grok inspect` (or `--json`) to verify discovered configuration, skills, MCPs, etc.
+- Persistent auto-update disable: `[cli] auto_update = false`
+- Custom models can be defined in config.toml and selected with `-m`.
+- Many features (MCP, permissions, memory) can be toggled via env vars, config, or flags.
 
 ## Rules
 
-1. Always include `--no-auto-update` when running in scripts, CI, or ACP environments.
-2. Prefer `--output-format json` or `streaming-json` when Hermes needs to parse results programmatically.
-3. For long prompts, prefer `--prompt-file <PATH>` to avoid shell quoting and token escaping mistakes.
-4. For safety, use `--always-approve` or permissive `--permission-mode` values only when the task is well-scoped and low-risk.
-5. Grok Build requires authentication. Interactive use opens browser login; headless/server use can rely on `XAI_API_KEY` or cached login (`grok login`).
-6. Re-check `grok --help` and `grok version` after upgrades; this skill targets `@xai-official/grok` 0.2.x behavior observed at 0.2.20.
+1. **Always** include `--no-auto-update` in scripts, CI, ACP, and automated environments.
+2. Prefer structured output (`json`, `streaming-json`, or `--json-schema`) for reliable parsing by the calling agent.
+3. For long or complex prompts, use `--prompt-file <PATH>` to avoid quoting/escaping issues.
+4. Use `--always-approve` and permissive modes **only** for well-scoped, low-risk tasks. Prefer explicit allow/deny lists.
+5. Authentication: headless/server use `XAI_API_KEY`; interactive opens browser.
+6. Re-check `grok version`, `grok --help`, and subcommand helps after every upgrade — this skill targets v0.2.92 behavior observed on 2026-07-08.
+7. When using MCPs or plugins, verify with `grok mcp` / `grok plugin` and `grok inspect`.
+8. Limit `--max-turns` and use tool allowlists to control cost and blast radius in agent-orchestrated runs.
 
-## Limitations (Strictly Based on Docs)
+## Limitations (Strictly Based on Latest Docs)
 
-- Headless mode is primarily triggered with `-p, --single`, but the 0.2.x CLI also supports `--prompt-file` and `--prompt-json`.
-- ACP is available via `grok agent stdio`. xAI docs describe JSON-RPC methods such as `initialize`, `authenticate`, `session/new`, `session/prompt`, and streaming `session/update` chunks.
-- Worktree, subagent, plugin, MCP, memory, session-management, export/import, trace, leader, and managed setup commands exist in the 0.2.x CLI, but this skill only gives orchestration guidance rather than exhaustive CLI documentation.
-- Enterprise deployment details are intentionally out of scope; consult current xAI docs before automating deployment.
+- Many rich TUI features (mouse, fullscreen, Plan Mode visuals, subagent view) are not available or fully usable in pure headless / ACP mode.
+- Flag set and behavior can change between minor versions; always verify locally.
+- Enterprise/sandbox/advanced permission features may require specific deployment context.
+- Full ACP JSON-RPC method documentation is still evolving; test `grok agent stdio` thoroughly for production integrations.
+- This skill provides orchestration guidance and curated flag recommendations, not exhaustive CLI reference.
 
-## Recommended Pattern in Hermes
+## Recommended Pattern in Compatible Agents
 
-When the user wants to delegate work to Grok Build:
+When delegating work to Grok Build:
 
-1. Hermes generates a clear, self-contained prompt.
-2. Hermes calls the `terminal` tool with the appropriate `grok -p ...` command.
-3. For very long tasks, use `background=true` + `notify_on_complete=true`.
+1. The calling agent generates a clear, self-contained prompt (or prompt file).
+2. The agent calls its `terminal` tool (or equivalent) with carefully chosen `grok -p ...` flags, preferring structured output and safety limits.
+3. For very long tasks, use background execution + completion notification.
+4. For deep integration, spawn `grok agent stdio` and communicate via ACP/JSON-RPC.
+5. Use `grok inspect`, `grok mcp`, `grok plugin`, session/worktree commands to manage environment and state.
+6. After completion, optionally export transcripts or import context from other tools (e.g. Claude Code).
 
-This approach keeps Hermes as the orchestrator while leveraging Grok Build's agent capabilities.
+This keeps the calling agent as the orchestrator while fully leveraging Grok Build's powerful coding agent capabilities (Grok 4.5 + tooling).
+
+The dual-layout design (root SKILL.md + packaged copy) ensures this skill works seamlessly across Hermes, Claude Code, OpenAI Codex, OpenClaw, and generic AgentSkills loaders.
