@@ -1,4 +1,4 @@
 interface:
-  display_name: "Grok Build for Hermes"
-  short_description: "AgentSkills-compatible skill: grok-build-for-hermes"
-  default_prompt: "Use $grok-build-for-hermes and follow SKILL.md."
+  display_name: "Grok Build for Agent"
+  short_description: "AgentSkills-compatible skill: grok-build-for-agent (multi-agent, Grok Build v0.2.92 + Grok 4.5)"
+  default_prompt: "Use $grok-build-for-agent and follow SKILL.md."
